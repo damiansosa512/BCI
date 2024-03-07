@@ -18,6 +18,8 @@ curl --location 'http://localhost:8009/swagger-ui/index.html' \
 curl --location 'http://localhost:8009/v3/api-docs' \
 --header 'Cookie: JSESSIONID=1EB4055B5BA27D1FF70261DC98EF5208'
 
+https://github.com/damiansosa512/BCI/blob/main/BCI_Diagram.jpg
+
 ## Metodos para probar el ABM
 
 ### Ingreso de un usuario nuevo
