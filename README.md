@@ -6,6 +6,8 @@ Este api, proporciona la funcionalidad de ABM para un cliente y sus lineas telef
 
 mvn clean install
 
+![BCI_Diagram](https://github.com/damiansosa512/BCI/assets/19752827/602848a9-7c3c-43c8-a72e-3d1b187a0077)
+
 ### Inicio de aplicacion
 java -jar .\target\demo-0.0.1-SNAPSHOT.jar
 
