@@ -74,3 +74,7 @@ curl --location --request DELETE 'http://localhost:8009/api-user/v1/3cf3a4db-a06
 curl --location --request POST 'http://localhost:8009/api-auth/v1/?user=juan&pass=admin' \
 --header 'Cookie: JSESSIONID=1EB4055B5BA27D1FF70261DC98EF5208' \
 --data ''
+
+## Metodo para obtener el Swagger
+curl --location 'http://localhost:8009/swagger-ui/index.html' \
+--header 'Cookie: JSESSIONID=1EB4055B5BA27D1FF70261DC98EF5208'
