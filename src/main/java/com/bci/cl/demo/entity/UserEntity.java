@@ -51,7 +51,7 @@ public class UserEntity {
     private LocalDateTime lastLogin;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "id", referencedColumnName = "id")
+    @JoinColumn(name = "rol_id", referencedColumnName = "rol_id")
     private RolEntity rol;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)

@@ -19,7 +19,7 @@ public class RolEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer rol_id;
 
     @Column(name="rol")
     private String name;
