@@ -2,13 +2,25 @@
 
 Este api, proporciona la funcionalidad de ABM para un cliente y sus lineas telefonicas.
 
-### Instalacion
+## Maven
+
+### Instalación 
 
 mvn clean install
 
 ### Inicio de aplicacion
 
 java -jar .\target\demo-0.0.1-SNAPSHOT.jar
+
+## Gradle
+
+### Instalación
+
+gradle clean build
+
+### Inicio de aplicacion
+
+gradlew.bat bootRun
 
 ### Diagrama de DB
 
