@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Data
 @Builder
 @Table(name = "phone", schema = "public")
-    public class PhoneEntity {
+public class PhoneEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

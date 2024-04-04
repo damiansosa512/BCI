@@ -11,13 +11,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class ErrorController {
 
-    @ExceptionHandler(MailError.class)
+    @ExceptionHandler({MailError.class, UserNotFoundError.class})
     public ResponseEntity<ErrorDto> manageEmailError(MailError e){
         return new ResponseEntity<>(ErrorDto.builder().code(e.getCode()).message(e.getMessage()).build(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(UserNotFoundError.class)
-    public ResponseEntity<ErrorDto> manageEmailError(UserNotFoundError e){
-        return new ResponseEntity<>(ErrorDto.builder().code(e.getCode()).message(e.getMessage()).build(), HttpStatus.BAD_REQUEST);
-    }
 }

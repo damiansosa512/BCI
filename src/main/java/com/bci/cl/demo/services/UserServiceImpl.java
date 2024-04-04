@@ -2,6 +2,7 @@ package com.bci.cl.demo.services;
 
 import com.bci.cl.demo.dto.UserDto;
 import com.bci.cl.demo.dto.response.InsertUserDto;
+import com.bci.cl.demo.dto.response.UpdateUserDto;
 import com.bci.cl.demo.entity.PhoneEntity;
 import com.bci.cl.demo.entity.UserEntity;
 import com.bci.cl.demo.exception.MailError;
@@ -20,7 +21,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
@@ -40,46 +41,51 @@ public class UserServiceImpl implements UserService{
 
     public InsertUserDto insertTransaction(UserDto userDto, String authorization) {
         userDto.setToken(Util.getToken(authorization));
-        Optional<UserEntity> userEntity = processUser(userDto);
-        return userMapper.responseInsert(userEntity.get());
+        Optional<UserEntity> userfinded = findUser(userDto.getEmail());
+        if (!userfinded.isPresent()) {
+            Optional<UserEntity> userEntity = processUser(userDto);
+            return userMapper.responseInsert(userEntity.get());
+        }
+        throw new MailError(0, "El usuario ya se encuentra registrado");
     }
 
-    public UserDto getTransaction(UUID uuid){
+    public UserDto getTransaction(UUID uuid) {
         Optional<UserEntity> userEntity = userRepository.findById(uuid);
         return userEntity.map(userMapper::toDto).orElse(null);
     }
 
     @Transactional
-    public String deleteTransaction(UUID uuid){
+    public String deleteTransaction(UUID uuid) {
         Long result = userRepository.deleteById(uuid);
-        if(result==0L){
+        if (result == 0L) {
             throw new UserNotFoundError(1, "No se encuentra el usuario que desea eliminar");
         }
         return "Borrado exitoso";
     }
 
-    public UserEntity updateTransaction(UserDto userDto,String authorization) {
+    public UpdateUserDto updateTransaction(UserDto userDto, String authorization) {
         userDto.setToken(Util.getToken(authorization));
         Optional<UserEntity> userfinded = findUser(userDto.getEmail());
         if (userfinded.isPresent()) {
-            UserEntity userEntity = UserEntity.buildUserEntity(userMapper.toEntity(userDto));
-            //return
-            userEntity.setId(userfinded.get().getId());
-            userRepository.save(UserEntity.buildUserEntity(userEntity));
-            userRepository.flush();
-            return null;
+            userDto.setId(userfinded.get().getId());
+            Optional<UserEntity> userEntity = processUser(userDto);
+            return userMapper.responseUpdate(userEntity.get());
         }
-        return null;
+        throw new MailError(0, "El usuario no se encuentra registrado");
     }
 
 
     private Optional<UserEntity> processUser(UserDto userDto) {
-        Optional<UserEntity> userfinded = findUser(userDto.getEmail());
-        if (!userfinded.isPresent()) {
-            UserEntity user = userMapper.toEntity(userDto);
-            return storeUserAndPhones(user);
-        }
-        throw new MailError(0, "El usuario ya se encuentra registrado");
+        UserEntity user = userMapper.toEntity(userDto);
+        userDto.getPhones().stream().forEach(
+                t -> {
+                    PhoneEntity phoneEntity = phoneMapper.toEntity(t);
+                    phoneEntity.setUser(user);
+                    user.getPhones().add(phoneEntity);
+                }
+        );
+        return storeUserAndPhones(user);
+
     }
 
     private void processPhones(UserDto userDto, UUID id) {
@@ -96,11 +102,11 @@ public class UserServiceImpl implements UserService{
     }
 
     private Optional<UserEntity> storeUserAndPhones(UserEntity user) {
-        UserEntity userSaved = userRepository.save(UserEntity.buildUserEntity(user));
+        UserEntity userSaved = userRepository.save(user);
         return Optional.of(userSaved);
     }
 
-    public Optional<UserEntity>findByNameAndPassword(String userName, String password){
+    public Optional<UserEntity> findByNameAndPassword(String userName, String password) {
         return userRepository.findByNameAndPassword(userName, password);
     }
 }

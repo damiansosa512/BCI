@@ -2,11 +2,12 @@ package com.bci.cl.demo.mapper;
 
 import com.bci.cl.demo.dto.UserDto;
 import com.bci.cl.demo.dto.response.InsertUserDto;
+import com.bci.cl.demo.dto.response.UpdateUserDto;
+import com.bci.cl.demo.entity.PhoneEntity;
 import com.bci.cl.demo.entity.UserEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.ReportingPolicy;
+import org.mapstruct.*;
+
+import java.util.ArrayList;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
@@ -16,8 +17,8 @@ public interface UserMapper {
             @Mapping(target = "password", source = "userDto.password"),
             @Mapping(target = "email", source = "userDto.email"),
             @Mapping(target = "token", source = "userDto.token"),
-            @Mapping(target = "phones", source = "userDto.phones"),
-            @Mapping(target = "rol", source = "userDto.rol")
+            @Mapping(target = "rol", source = "userDto.rol"),
+            @Mapping(target = "phones", source = "email", qualifiedByName = "buildVector")
     })
     UserEntity toEntity(UserDto userDto);
 
@@ -40,5 +41,17 @@ public interface UserMapper {
             @Mapping(target = "token", source = "userEntity.token"),
     })
     InsertUserDto responseInsert(UserEntity userEntity);
+
+    @Mappings({
+            @Mapping(target = "id", source = "userEntity.id"),
+            @Mapping(target = "modified_at", source = "userEntity.modifiedAt"),
+            @Mapping(target = "token", source = "userEntity.token")
+    })
+    UpdateUserDto responseUpdate(UserEntity userEntity);
+
+    @Named("buildVector")
+    default ArrayList<PhoneEntity> buildVector(String email) {
+        return new ArrayList<PhoneEntity>();
+    }
 
 }

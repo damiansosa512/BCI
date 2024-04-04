@@ -57,45 +57,5 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<PhoneEntity> phones;
 
-    public static UserEntity buildUserEntity(UserEntity user){
-        UserEntity entity = UserEntity.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .rol(user.getRol())
-                .token(user.getToken())
-                .phones(new ArrayList<>())
-                .build();
-        user.getPhones().forEach(t -> {
-            PhoneEntity phone = PhoneEntity.builder()
-                    .number(t.getNumber())
-                    .citycode(t.getCitycode())
-                    .countrycode(t.getCountrycode())
-                    .user(entity)
-                    .build();
-            entity.getPhones().add(phone);});
-            return entity;
-    }
-
-    public static UserEntity buildUserEntityfromDto(UserEntity user){
-        UserEntity entity = UserEntity.builder()
-                .name(user.getName())
-                .email(user.getEmail())
-                .password(user.getPassword())
-                .token(user.getToken())
-                .phones(new ArrayList<>())
-                .rol(user.getRol())
-                .build();
-        user.getPhones().forEach(t -> {
-            PhoneEntity phone = PhoneEntity.builder()
-                    .number(t.getNumber())
-                    .citycode(t.getCitycode())
-                    .countrycode(t.getCountrycode())
-                    .user(entity)
-                    .build();
-            entity.getPhones().add(phone);});
-        return entity;
-    }
 
 }

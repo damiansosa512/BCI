@@ -2,8 +2,10 @@ package com.bci.cl.demo.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
+@EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @Data
 public class MailError extends RuntimeException{

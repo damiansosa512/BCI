@@ -32,13 +32,12 @@ public class UserServiceTest {
     private UserRepository userRepository;
 
     @Spy
-    private UserMapper userMapper =
-            Mappers.getMapper(UserMapper.class);
+    private UserMapper userMapper = Mappers.getMapper(UserMapper.class);
 
     @Mock
     private PhonesRepository phonesRepository;
 
-    private PhoneMapper phoneMapper;
+    private PhoneMapper phoneMapper = Mappers.getMapper(PhoneMapper.class);
 
     Optional<UserEntity> userEntity;
 
